@@ -16,6 +16,7 @@ class Course {
     static async getAll(filters = {}) {
         let conn;
         try {
+            console.log('Obteniendo todos los cursos con filtros:', filters);
             conn = await pool.getConnection();
             
             let query = `
@@ -48,7 +49,11 @@ class Course {
             // Ordenar resultados
             query += ' ORDER BY c.created_at DESC';
             
+            console.log('Consulta SQL:', query);
+            console.log('Parámetros:', params);
+            
             const courses = await conn.query(query, params);
+            console.log(`Se encontraron ${courses.length} cursos`);
             return courses;
         } catch (err) {
             console.error('Error al obtener cursos:', err);
@@ -67,6 +72,7 @@ class Course {
     static async getById(id) {
         let conn;
         try {
+            console.log(`Buscando curso con ID: ${id}`);
             conn = await pool.getConnection();
             
             // Obtener datos del curso
@@ -80,13 +86,16 @@ class Course {
                 WHERE c.id = ?
             `;
             
+            console.log('Consulta SQL para curso:', courseQuery);
             const courses = await conn.query(courseQuery, [id]);
             
             if (courses.length === 0) {
+                console.log(`No se encontró el curso con ID: ${id}`);
                 return null;
             }
             
             const course = courses[0];
+            console.log(`Curso encontrado: ${course.title}`);
             
             // Obtener módulos del curso
             const modulesQuery = `
@@ -97,6 +106,7 @@ class Course {
             `;
             
             course.modules = await conn.query(modulesQuery, [id]);
+            console.log(`Se encontraron ${course.modules.length} módulos para el curso`);
             
             // Para cada módulo, obtener sus lecciones
             for (const module of course.modules) {
@@ -108,6 +118,7 @@ class Course {
                 `;
                 
                 module.lessons = await conn.query(lessonsQuery, [module.id]);
+                console.log(`Módulo ${module.id}: ${module.lessons.length} lecciones`);
             }
             
             return course;
@@ -128,10 +139,14 @@ class Course {
     static async create(courseData) {
         let conn;
         try {
+            console.log('Creando nuevo curso con datos:', courseData);
             conn = await pool.getConnection();
             
             // Iniciar transacción
             await conn.beginTransaction();
+            
+            // Imprimir información sobre la conexión a la BD
+            console.log('Conexión a BD establecida para crear curso');
             
             const query = `
                 INSERT INTO courses (
@@ -145,24 +160,49 @@ class Course {
                 courseData.description,
                 courseData.category_id,
                 courseData.duration_hours || 0,
-                courseData.is_active !== undefined ? courseData.is_active : true,
+                courseData.is_active ? 1 : 0,
                 courseData.created_by
             ];
             
-            const result = await conn.query(query, params);
-            const courseId = result.insertId;
+            console.log('Consulta SQL:', query);
+            console.log('Parámetros:', params);
             
-            // Confirmar transacción
-            await conn.commit();
-            
-            return { id: courseId, ...courseData };
+            try {
+                const result = await conn.query(query, params);
+                const courseId = result.insertId;
+                
+                // Confirmar transacción
+                await conn.commit();
+                
+                console.log(`Curso creado con ID: ${courseId}`);
+                return { id: courseId, ...courseData };
+            } catch (insertError) {
+                // Revertir transacción en caso de error en la inserción
+                await conn.rollback();
+                console.error('Error al insertar curso:', insertError);
+                throw insertError;
+            }
         } catch (err) {
-            // Revertir transacción en caso de error
-            if (conn) await conn.rollback();
-            console.error('Error al crear curso:', err);
+            console.error('Error general al crear curso:', err);
+            if (err.code) {
+                console.error('Código de error SQL:', err.code);
+            }
+            if (err.sqlMessage) {
+                console.error('Mensaje de error SQL:', err.sqlMessage);
+            }
+            if (err.sql) {
+                console.error('SQL ejecutado:', err.sql);
+            }
             throw err;
         } finally {
-            if (conn) conn.release();
+            if (conn) {
+                try {
+                    conn.release();
+                    console.log('Conexión liberada');
+                } catch (releaseError) {
+                    console.error('Error al liberar la conexión:', releaseError);
+                }
+            }
         }
     }
     
@@ -176,6 +216,7 @@ class Course {
     static async update(id, courseData) {
         let conn;
         try {
+            console.log(`Actualizando curso ID ${id} con datos:`, courseData);
             conn = await pool.getConnection();
             
             // Iniciar transacción
@@ -193,15 +234,19 @@ class Course {
                 courseData.description,
                 courseData.category_id,
                 courseData.duration_hours || 0,
-                courseData.is_active !== undefined ? courseData.is_active : true,
+                courseData.is_active ? 1 : 0,
                 id
             ];
+            
+            console.log('Consulta SQL:', query);
+            console.log('Parámetros:', params);
             
             const result = await conn.query(query, params);
             
             // Confirmar transacción
             await conn.commit();
             
+            console.log(`Curso actualizado, filas afectadas: ${result.affectedRows}`);
             return result.affectedRows > 0;
         } catch (err) {
             // Revertir transacción en caso de error
@@ -222,6 +267,7 @@ class Course {
     static async delete(id) {
         let conn;
         try {
+            console.log(`Eliminando curso ID: ${id}`);
             conn = await pool.getConnection();
             
             // Iniciar transacción
@@ -234,6 +280,7 @@ class Course {
             // Confirmar transacción
             await conn.commit();
             
+            console.log(`Curso eliminado, filas afectadas: ${result.affectedRows}`);
             return result.affectedRows > 0;
         } catch (err) {
             // Revertir transacción en caso de error
@@ -253,10 +300,14 @@ class Course {
     static async getAllCategories() {
         let conn;
         try {
+            console.log('Obteniendo todas las categorías de cursos');
             conn = await pool.getConnection();
             
             const query = `SELECT * FROM course_categories ORDER BY name ASC`;
-            return await conn.query(query);
+            const categories = await conn.query(query);
+            
+            console.log(`Se encontraron ${categories.length} categorías`);
+            return categories;
         } catch (err) {
             console.error('Error al obtener categorías:', err);
             throw err;

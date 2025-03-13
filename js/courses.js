@@ -31,6 +31,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Redirigir a dashboard de usuario
                 window.location.href = '/user/dashboard';
             }
+
+            console.log('Usuario actual:', user);
         } catch (error) {
             console.error('Error al parsear datos de usuario:', error);
         }
@@ -156,6 +158,8 @@ function initCoursesListPage() {
      * Cargar la lista de cursos desde la API
      */
     function loadCourses() {
+        console.log('Cargando cursos...');
+        
         // Mostrar indicador de carga
         if (coursesTableBody) {
             coursesTableBody.innerHTML = '<tr><td colspan="6" class="text-center">Cargando cursos...</td></tr>';
@@ -181,9 +185,12 @@ function initCoursesListPage() {
             .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(filters[key])}`)
             .join('&');
         
-        // Obtener token de sesión
+        console.log('Filtros aplicados:', filters);
+        console.log('Query string:', queryString);
+        
+        // Obtener token de autenticación (en este caso, el employee_number)
         const userData = JSON.parse(sessionStorage.getItem('user') || '{}');
-        const token = userData.token || '';
+        const token = userData.employee_number || '';
         
         // Realizar solicitud a la API
         fetch(`/api/courses${queryString ? '?' + queryString : ''}`, {
@@ -194,22 +201,24 @@ function initCoursesListPage() {
             }
         })
         .then(response => {
+            console.log('Respuesta del servidor:', response.status, response.statusText);
             if (!response.ok) {
-                throw new Error('Error al cargar los cursos');
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
             }
             return response.json();
         })
         .then(data => {
+            console.log('Datos recibidos:', data);
             renderCourses(data.data || []);
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error al cargar cursos:', error);
             if (coursesTableBody) {
                 coursesTableBody.innerHTML = `
                     <tr>
                         <td colspan="6" class="text-center">
                             <div class="alert error">
-                                Error al cargar los cursos. Inténtelo de nuevo.
+                                Error al cargar los cursos: ${error.message}
                             </div>
                         </td>
                     </tr>
@@ -332,9 +341,11 @@ function initCoursesListPage() {
             return;
         }
         
-        // Obtener token de sesión
+        console.log(`Eliminando curso ID: ${courseToDelete}`);
+        
+        // Obtener token de autenticación
         const userData = JSON.parse(sessionStorage.getItem('user') || '{}');
-        const token = userData.token || '';
+        const token = userData.employee_number || '';
         
         // Realizar solicitud a la API
         fetch(`/api/courses/${courseToDelete}`, {
@@ -346,7 +357,7 @@ function initCoursesListPage() {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Error al eliminar el curso');
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
             }
             return response.json();
         })
@@ -358,9 +369,9 @@ function initCoursesListPage() {
             loadCourses();
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error al eliminar el curso:', error);
             closeDeleteModal();
-            alert('Error al eliminar el curso. Inténtelo de nuevo.');
+            alert(`Error al eliminar el curso: ${error.message}`);
         });
     }
 }
@@ -369,6 +380,8 @@ function initCoursesListPage() {
  * Inicializar la página de creación de curso
  */
 function initCreateCoursePage() {
+    console.log('Inicializando página de creación de curso');
+    
     // Referencias a elementos específicos
     const createCourseForm = document.getElementById('createCourseForm');
     const formMessage = document.getElementById('formMessage');
@@ -381,6 +394,13 @@ function initCreateCoursePage() {
     if (createCourseForm) {
         createCourseForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            console.log('Formulario enviado');
+            
+            // Esconder mensaje anterior si existe
+            if (formMessage) {
+                formMessage.style.display = 'none';
+            }
             
             // Validar formulario
             if (!validateCourseForm(createCourseForm, formMessage)) {
@@ -396,9 +416,13 @@ function initCreateCoursePage() {
                 is_active: document.getElementById('courseActive').checked
             };
             
-            // Obtener token de sesión
+            console.log('Datos del formulario:', formData);
+            
+            // Obtener token de autenticación
             const userData = JSON.parse(sessionStorage.getItem('user') || '{}');
-            const token = userData.token || '';
+            const token = userData.employee_number || '';
+            
+            console.log('Token de autenticación:', token);
             
             // Realizar solicitud a la API
             fetch('/api/courses', {
@@ -410,12 +434,24 @@ function initCreateCoursePage() {
                 body: JSON.stringify(formData)
             })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error al crear el curso');
-                }
-                return response.json();
+                console.log('Respuesta del servidor:', response.status, response.statusText);
+                
+                // Convertir la respuesta a JSON incluso si hay error
+                return response.json().then(data => {
+                    if (!response.ok) {
+                        // Si la respuesta no fue ok, lanzar un error con los detalles
+                        throw {
+                            status: response.status,
+                            message: data.message || 'Error desconocido',
+                            details: data
+                        };
+                    }
+                    return data;
+                });
             })
             .then(data => {
+                console.log('Curso creado exitosamente:', data);
+                
                 showFormMessage(formMessage, 'Curso creado exitosamente', false);
                 
                 // Redireccionar después de un breve retraso
@@ -424,8 +460,14 @@ function initCreateCoursePage() {
                 }, 1500);
             })
             .catch(error => {
-                console.error('Error:', error);
-                showFormMessage(formMessage, 'Error al crear el curso. Inténtelo de nuevo.', true);
+                console.error('Error al crear el curso:', error);
+                
+                let errorMessage = 'Error al crear el curso.';
+                if (error.message) {
+                    errorMessage += ` ${error.message}`;
+                }
+                
+                showFormMessage(formMessage, errorMessage, true);
             });
         });
     }
@@ -435,6 +477,8 @@ function initCreateCoursePage() {
  * Inicializar la página de edición de curso
  */
 function initEditCoursePage() {
+    console.log('Inicializando página de edición de curso');
+    
     // Referencias a elementos específicos
     const editCourseForm = document.getElementById('editCourseForm');
     const formMessage = document.getElementById('formMessage');
@@ -451,6 +495,7 @@ function initEditCoursePage() {
     if (courseId) {
         loadCourseData(courseId);
     } else {
+        console.error('No se pudo obtener el ID del curso de la URL');
         window.location.href = '/admin/courses';
     }
     
@@ -458,6 +503,8 @@ function initEditCoursePage() {
     if (editCourseForm) {
         editCourseForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            console.log('Formulario de edición enviado');
             
             // Validar formulario
             if (!validateCourseForm(editCourseForm, formMessage)) {
@@ -473,9 +520,11 @@ function initEditCoursePage() {
                 is_active: document.getElementById('courseActive').checked
             };
             
-            // Obtener token de sesión
+            console.log('Datos del formulario de edición:', formData);
+            
+            // Obtener token de autenticación
             const userData = JSON.parse(sessionStorage.getItem('user') || '{}');
-            const token = userData.token || '';
+            const token = userData.employee_number || '';
             
             // Realizar solicitud a la API
             fetch(`/api/courses/${courseId}`, {
@@ -487,10 +536,20 @@ function initEditCoursePage() {
                 body: JSON.stringify(formData)
             })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error al actualizar el curso');
-                }
-                return response.json();
+                console.log('Respuesta del servidor:', response.status);
+                
+                // Convertir la respuesta a JSON incluso si hay error
+                return response.json().then(data => {
+                    if (!response.ok) {
+                        // Si la respuesta no fue ok, lanzar un error con los detalles
+                        throw {
+                            status: response.status,
+                            message: data.message || 'Error desconocido',
+                            details: data
+                        };
+                    }
+                    return data;
+                });
             })
             .then(data => {
                 showFormMessage(formMessage, 'Curso actualizado exitosamente', false);
@@ -501,8 +560,14 @@ function initEditCoursePage() {
                 }, 1500);
             })
             .catch(error => {
-                console.error('Error:', error);
-                showFormMessage(formMessage, 'Error al actualizar el curso. Inténtelo de nuevo.', true);
+                console.error('Error al actualizar el curso:', error);
+                
+                let errorMessage = 'Error al actualizar el curso.';
+                if (error.message) {
+                    errorMessage += ` ${error.message}`;
+                }
+                
+                showFormMessage(formMessage, errorMessage, true);
             });
         });
     }
@@ -511,14 +576,16 @@ function initEditCoursePage() {
      * Cargar datos del curso para edición
      */
     function loadCourseData(courseId) {
+        console.log(`Cargando datos del curso ID: ${courseId}`);
+        
         // Mostrar indicador de carga
         if (loadingIndicator) loadingIndicator.style.display = 'flex';
         if (courseFormPanel) courseFormPanel.style.display = 'none';
         if (courseModulesPanel) courseModulesPanel.style.display = 'none';
         
-        // Obtener token de sesión
+        // Obtener token de autenticación
         const userData = JSON.parse(sessionStorage.getItem('user') || '{}');
-        const token = userData.token || '';
+        const token = userData.employee_number || '';
         
         // Realizar solicitud a la API
         fetch(`/api/courses/${courseId}`, {
@@ -530,11 +597,13 @@ function initEditCoursePage() {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Error al cargar los datos del curso');
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
             }
             return response.json();
         })
         .then(data => {
+            console.log('Datos del curso recibidos:', data);
+            
             const course = data.data;
             if (!course) {
                 throw new Error('Curso no encontrado');
@@ -552,10 +621,10 @@ function initEditCoursePage() {
             if (courseModulesPanel) courseModulesPanel.style.display = 'block';
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error al cargar los datos del curso:', error);
             if (loadingIndicator) loadingIndicator.style.display = 'none';
             
-            alert('Error al cargar los datos del curso. Redireccionando a la lista de cursos.');
+            alert(`Error al cargar los datos del curso: ${error.message}. Redireccionando a la lista de cursos.`);
             setTimeout(() => {
                 window.location.href = '/admin/courses';
             }, 1000);
@@ -682,9 +751,11 @@ function getCourseIdFromUrl() {
 function loadCategories(selectElement) {
     if (!selectElement) return;
     
-    // Obtener token de sesión
+    console.log('Cargando categorías de cursos');
+    
+    // Obtener token de autenticación
     const userData = JSON.parse(sessionStorage.getItem('user') || '{}');
-    const token = userData.token || '';
+    const token = userData.employee_number || '';
     
     // Realizar solicitud a la API
     fetch('/api/courses/categories', {
@@ -696,14 +767,16 @@ function loadCategories(selectElement) {
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Error al cargar las categorías');
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
         return response.json();
     })
     .then(data => {
+        console.log('Categorías cargadas:', data);
+        
         const categories = data.data || [];
         
-        // Agregar opción predeterminada
+        // Preservar opción predeterminada
         const defaultOption = selectElement.querySelector('option[value=""]');
         if (!defaultOption) {
             selectElement.innerHTML = '<option value="">Seleccionar categoría</option>';
@@ -719,6 +792,7 @@ function loadCategories(selectElement) {
     })
     .catch(error => {
         console.error('Error al cargar categorías:', error);
+        alert(`Error al cargar las categorías: ${error.message}`);
     });
 }
 
@@ -726,6 +800,8 @@ function loadCategories(selectElement) {
  * Validar formulario de curso
  */
 function validateCourseForm(form, messageElement) {
+    console.log('Validando formulario');
+    
     // Validar título
     const title = form.querySelector('[name="title"]');
     if (!title || !title.value.trim()) {

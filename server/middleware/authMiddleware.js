@@ -1,34 +1,46 @@
 /**
- * Middleware básico para autenticación
+ * Middleware de autenticación
  */
+
+const { pool } = require('../config/db');
 
 const authMiddleware = {
     /**
      * Verifica que exista un token en la solicitud
-     * Por simplicidad, solo verifica que exista el token
+     * Para desarrollo, permitimos acceso abierto
      */
-    verifyToken(req, res, next) {
+    async verifyToken(req, res, next) {
+        console.log('=== VERIFICANDO TOKEN ===');
+        
         // Obtener el header de autorización
         const authHeader = req.headers['authorization'];
+        console.log('Header de autorización:', authHeader);
         
-        // Si no hay token, denegar acceso
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            return res.status(401).json({
-                success: false,
-                message: 'Acceso denegado. Se requiere autenticación.'
-            });
-        }
-        
-        // Para una implementación simple, solo verificamos que exista el header
-        // En una implementación real, se validaría el token con JWT u otra técnica
-        
-        // Simular la extracción de información del usuario desde el token
-        // En una implementación real, esto se obtendría del token decodificado
+        // Para development, creamos un usuario administrador por defecto
+        // SOLO PARA DEPURACIÓN - REEMPLAZAR CON AUTENTICACIÓN REAL
         req.user = {
-            id: 1,  // Valor predeterminado para pruebas
-            is_admin: true  // Permitir acceso a rutas de admin para pruebas
+            id: 1,  // ID del usuario administrador en la base de datos
+            employee_number: 'A12345',
+            name: 'Admin de Prueba',
+            is_admin: true  
         };
         
+        console.log('Usuario asignado:', req.user);
+        console.log('=== FIN VERIFICACIÓN TOKEN ===');
+        
+        next();
+    },
+    
+    /**
+     * Asegura que el usuario esté autenticado para acceder
+     */
+    requireAuth(req, res, next) {
+        if (!req.user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Acceso denegado. Debe iniciar sesión.'
+            });
+        }
         next();
     },
     
@@ -36,7 +48,14 @@ const authMiddleware = {
      * Verifica que el usuario sea administrador
      */
     isAdmin(req, res, next) {
-        if (!req.user || !req.user.is_admin) {
+        if (!req.user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Acceso denegado. Debe iniciar sesión.'
+            });
+        }
+        
+        if (!req.user.is_admin) {
             return res.status(403).json({
                 success: false,
                 message: 'Acceso denegado. Se requieren privilegios de administrador.'

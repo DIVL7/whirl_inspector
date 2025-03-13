@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Cursos - Whirl Inspector</title>
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/admin-dashboard.css">
+    <link rel="stylesheet" href="/css/courses.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- Header con barra de navegación -->
+    <header class="main-header admin-header">
+        <div class="header-container">
+            <div class="header-left">
+                <button id="menuToggle" class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="logo">Whirl Inspector - Administración</h1>
+            </div>
+            <div class="header-right">
+                <div class="admin-controls">
+                    <button class="btn-icon" title="Notificaciones">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">5</span>
+                    </button>
+                    <button class="btn-icon" title="Configuración">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+                <div class="user-info">
+                    <span id="userName">Administrador</span>
+                    <button id="userMenu" class="user-menu-toggle">
+                        <i class="fas fa-user-shield"></i>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div id="userMenuDropdown" class="dropdown-menu">
+                        <a href="#profile"><i class="fas fa-id-card"></i> Mi Perfil</a>
+                        <a href="#settings"><i class="fas fa-cog"></i> Configuración</a>
+                        <hr>
+                        <a href="#" id="logoutButton"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenedor principal con sidebar y contenido -->
+    <div class="main-container">
+        <!-- Sidebar / Menú lateral -->
+        <aside id="sidebar" class="sidebar admin-sidebar">
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="/admin/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="#users"><i class="fas fa-users"></i> Usuarios</a>
+                    </li>
+                    <li class="has-submenu open">
+                        <a href="#content"><i class="fas fa-book"></i> Contenido <i class="fas fa-chevron-right submenu-arrow"></i></a>
+                        <ul class="submenu" style="max-height: 500px;">
+                            <li class="active"><a href="/admin/courses"><i class="fas fa-graduation-cap"></i> Cursos</a></li>
+                            <li><a href="#modulos"><i class="fas fa-cubes"></i> Módulos</a></li>
+                            <li><a href="#lecciones"><i class="fas fa-book-open"></i> Lecciones</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#examenes"><i class="fas fa-tasks"></i> Exámenes</a>
+                    </li>
+                    <li>
+                        <a href="#recursos"><i class="fas fa-file-alt"></i> Recursos</a>
+                    </li>
+                    <li>
+                        <a href="#certificados"><i class="fas fa-certificate"></i> Certificados</a>
+                    </li>
+                    <li class="has-submenu">
+                        <a href="#reports"><i class="fas fa-chart-line"></i> Reportes <i class="fas fa-chevron-right submenu-arrow"></i></a>
+                        <ul class="submenu">
+                            <li><a href="#progress"><i class="fas fa-chart-pie"></i> Progreso</a></li>
+                            <li><a href="#performance"><i class="fas fa-chart-bar"></i> Rendimiento</a></li>
+                            <li><a href="#activity"><i class="fas fa-history"></i> Actividad</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#configuracion"><i class="fas fa-cogs"></i> Configuración</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="main-content admin-content">
+            <div class="page-header">
+                <h2><i class="fas fa-graduation-cap"></i> Gestión de Cursos</h2>
+                <p class="breadcrumb">Inicio > Contenido > Cursos</p>
+            </div>
+
+            <!-- Barra de filtros y acciones -->
+            <div class="panel filters-panel">
+                <div class="panel-body">
+                    <div class="filters-container">
+                        <div class="search-box">
+                            <input type="text" id="searchCourses" placeholder="Buscar cursos...">
+                            <button id="searchButton"><i class="fas fa-search"></i></button>
+                        </div>
+                        <div class="filter-box">
+                            <select id="categoryFilter">
+                                <option value="">Todas las categorías</option>
+                                <!-- Se llenará dinámicamente -->
+                            </select>
+                        </div>
+                        <div class="filter-box">
+                            <select id="statusFilter">
+                                <option value="">Todos los estados</option>
+                                <option value="true">Activos</option>
+                                <option value="false">Inactivos</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="actions-container">
+                        <a href="/admin/courses/create" class="btn-primary">
+                            <i class="fas fa-plus"></i> Nuevo Curso
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de cursos -->
+            <div class="panel courses-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-list"></i> Lista de Cursos</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="data-table" id="coursesTable">
+                            <thead>
+                                <tr>
+                                    <th>Título</th>
+                                    <th>Categoría</th>
+                                    <th>Duración</th>
+                                    <th>Inscritos</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="coursesTableBody">
+                                <!-- Contenido dinámico -->
+                                <tr>
+                                    <td colspan="6" class="text-center">Cargando cursos...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer admin-footer">
+        <div class="footer-container">
+            <p>&copy; 2025 Whirl Inspector - Panel de Administración. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Modal de confirmación para eliminar -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Confirmación</h4>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar este curso? Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelDeleteBtn">Cancelar</button>
+                <button class="btn-danger" id="confirmDeleteBtn">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/courses.js"></script>
+</body>
+</html>

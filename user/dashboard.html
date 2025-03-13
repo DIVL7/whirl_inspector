@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard del Técnico - Whirl Inspector</title>
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- Header con barra de navegación -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="header-left">
+                <button id="menuToggle" class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="logo">Whirl Inspector</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span id="userName">Cargando...</span>
+                    <button id="userMenu" class="user-menu-toggle">
+                        <i class="fas fa-user-circle"></i>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div id="userMenuDropdown" class="dropdown-menu">
+                        <a href="#profile"><i class="fas fa-id-card"></i> Mi Perfil</a>
+                        <a href="#settings"><i class="fas fa-cog"></i> Configuración</a>
+                        <hr>
+                        <a href="#" id="logoutButton"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenedor principal con sidebar y contenido -->
+    <div class="main-container">
+        <!-- Sidebar / Menú lateral -->
+        <aside id="sidebar" class="sidebar">
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active">
+                        <a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="#cursos"><i class="fas fa-graduation-cap"></i> Mis Cursos</a>
+                    </li>
+                    <li>
+                        <a href="#modulos"><i class="fas fa-book-open"></i> Módulos</a>
+                    </li>
+                    <li>
+                        <a href="#certificados"><i class="fas fa-certificate"></i> Certificados</a>
+                    </li>
+                    <li>
+                        <a href="#examenes"><i class="fas fa-tasks"></i> Exámenes</a>
+                    </li>
+                    <li>
+                        <a href="#recursos"><i class="fas fa-file-pdf"></i> Recursos</a>
+                    </li>
+                    <li>
+                        <a href="#foros"><i class="fas fa-comments"></i> Foros</a>
+                    </li>
+                    <li>
+                        <a href="#ayuda"><i class="fas fa-question-circle"></i> Ayuda</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <div class="page-header">
+                <h2><i class="fas fa-tachometer-alt"></i> Dashboard del Técnico</h2>
+                <p class="breadcrumb">Inicio > Dashboard</p>
+            </div>
+
+            <!-- Tarjetas de resumen -->
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-card-icon blue">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="stat-card-info">
+                        <h3>Cursos Activos</h3>
+                        <p class="stat-number">3</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon green">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-card-info">
+                        <h3>Cursos Completados</h3>
+                        <p class="stat-number">7</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon orange">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-card-info">
+                        <h3>Horas de Formación</h3>
+                        <p class="stat-number">48</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon red">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <div class="stat-card-info">
+                        <h3>Certificaciones</h3>
+                        <p class="stat-number">5</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progreso del curso actual -->
+            <section class="panel current-progress">
+                <div class="panel-header">
+                    <h3><i class="fas fa-fire"></i> Mi Progreso Actual</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="current-course">
+                        <h4>Mantenimiento de Lavadoras Whirlpool Serie 400</h4>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 65%;"></div>
+                            </div>
+                            <span class="progress-text">65% completado</span>
+                        </div>
+                        <button class="btn-secondary"><i class="fas fa-play"></i> Continuar Curso</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cursos recientes y próximos -->
+            <div class="dashboard-columns">
+                <!-- Cursos recientes -->
+                <section class="panel recent-courses">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-history"></i> Cursos Recientes</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="course-list">
+                            <li>
+                                <div class="course-info">
+                                    <h4>Diagnóstico de Refrigeradores</h4>
+                                    <p>Último acceso: hace 2 días</p>
+                                </div>
+                                <span class="course-progress">80%</span>
+                            </li>
+                            <li>
+                                <div class="course-info">
+                                    <h4>Reparación de Hornos Eléctricos</h4>
+                                    <p>Último acceso: hace 5 días</p>
+                                </div>
+                                <span class="course-progress">45%</span>
+                            </li>
+                            <li>
+                                <div class="course-info">
+                                    <h4>Instalación de Lavaplatos</h4>
+                                    <p>Último acceso: hace 1 semana</p>
+                                </div>
+                                <span class="course-progress">100%</span>
+                            </li>
+                        </ul>
+                        <a href="#all-courses" class="btn-link">Ver todos los cursos <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+
+                <!-- Exámenes y certificaciones pendientes -->
+                <section class="panel upcoming-exams">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-calendar"></i> Próximos Exámenes</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="exam-list">
+                            <li>
+                                <div class="exam-info">
+                                    <h4>Certificación Técnico Nivel 2</h4>
+                                    <p>Fecha: 28 de marzo, 2025</p>
+                                </div>
+                                <span class="exam-status upcoming">Pendiente</span>
+                            </li>
+                            <li>
+                                <div class="exam-info">
+                                    <h4>Evaluación de Conocimientos Whirlpool</h4>
+                                    <p>Fecha: 15 de abril, 2025</p>
+                                </div>
+                                <span class="exam-status upcoming">Pendiente</span>
+                            </li>
+                        </ul>
+                        <a href="#all-exams" class="btn-link">Ver todos los exámenes <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Recursos recomendados -->
+            <section class="panel recommended-resources">
+                <div class="panel-header">
+                    <h3><i class="fas fa-star"></i> Recursos Recomendados</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="resources-grid">
+                        <div class="resource-card">
+                            <div class="resource-icon pdf">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                            <div class="resource-info">
+                                <h4>Manual de Reparación Serie 400</h4>
+                                <p>Manual técnico detallado para diagnóstico</p>
+                                <a href="#download" class="btn-sm"><i class="fas fa-download"></i> Descargar</a>
+                            </div>
+                        </div>
+                        <div class="resource-card">
+                            <div class="resource-icon video">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <div class="resource-info">
+                                <h4>Vídeo: Solución de Problemas Comunes</h4>
+                                <p>Tutorial paso a paso para diagnóstico rápido</p>
+                                <a href="#view" class="btn-sm"><i class="fas fa-play"></i> Ver</a>
+                            </div>
+                        </div>
+                        <div class="resource-card">
+                            <div class="resource-icon tool">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <div class="resource-info">
+                                <h4>Lista de Herramientas Recomendadas</h4>
+                                <p>Guía de herramientas para técnicos certificados</p>
+                                <a href="#view" class="btn-sm"><i class="fas fa-eye"></i> Ver</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <p>&copy; 2025 Whirl Inspector. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Whirl Inspector</title>
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/admin-dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- Header con barra de navegación -->
+    <header class="main-header admin-header">
+        <div class="header-container">
+            <div class="header-left">
+                <button id="menuToggle" class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="logo">Whirl Inspector - Administración</h1>
+            </div>
+            <div class="header-right">
+                <div class="admin-controls">
+                    <button class="btn-icon" title="Notificaciones">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">5</span>
+                    </button>
+                    <button class="btn-icon" title="Configuración">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+                <div class="user-info">
+                    <span id="userName">Luis Díaz</span>
+                    <button id="userMenu" class="user-menu-toggle">
+                        <i class="fas fa-user-shield"></i>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div id="userMenuDropdown" class="dropdown-menu">
+                        <a href="#profile"><i class="fas fa-id-card"></i> Mi Perfil</a>
+                        <a href="#settings"><i class="fas fa-cog"></i> Configuración</a>
+                        <hr>
+                        <a href="#" id="logoutButton"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenedor principal con sidebar y contenido -->
+    <div class="main-container">
+        <!-- Sidebar / Menú lateral -->
+        <aside id="sidebar" class="sidebar admin-sidebar">
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active">
+                        <a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="#users"><i class="fas fa-users"></i> Usuarios</a>
+                    </li>
+                    <li class="has-submenu">
+                        <a href="#content"><i class="fas fa-book"></i> Contenido <i class="fas fa-chevron-right submenu-arrow"></i></a>
+                        <ul class="submenu">
+                            <li><a href="#cursos"><i class="fas fa-graduation-cap"></i> Cursos</a></li>
+                            <li><a href="#modulos"><i class="fas fa-cubes"></i> Módulos</a></li>
+                            <li><a href="#lecciones"><i class="fas fa-book-open"></i> Lecciones</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#examenes"><i class="fas fa-tasks"></i> Exámenes</a>
+                    </li>
+                    <li>
+                        <a href="#recursos"><i class="fas fa-file-alt"></i> Recursos</a>
+                    </li>
+                    <li>
+                        <a href="#certificados"><i class="fas fa-certificate"></i> Certificados</a>
+                    </li>
+                    <li class="has-submenu">
+                        <a href="#reports"><i class="fas fa-chart-line"></i> Reportes <i class="fas fa-chevron-right submenu-arrow"></i></a>
+                        <ul class="submenu">
+                            <li><a href="#progress"><i class="fas fa-chart-pie"></i> Progreso</a></li>
+                            <li><a href="#performance"><i class="fas fa-chart-bar"></i> Rendimiento</a></li>
+                            <li><a href="#activity"><i class="fas fa-history"></i> Actividad</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#configuracion"><i class="fas fa-cogs"></i> Configuración</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="main-content admin-content">
+            <div class="page-header">
+                <h2><i class="fas fa-tachometer-alt"></i> Panel de Administración</h2>
+                <p class="breadcrumb">Inicio > Panel de Administración</p>
+            </div>
+
+            <!-- Tarjetas de estadísticas -->
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-card-icon blue">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-card-info">
+                        <h3>Total de Usuarios</h3>
+                        <p class="stat-number">256</p>
+                        <span class="stat-growth positive">+24 este mes</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon green">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="stat-card-info">
+                        <h3>Cursos Activos</h3>
+                        <p class="stat-number">18</p>
+                        <span class="stat-growth positive">+3 este mes</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon orange">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-card-info">
+                        <h3>Certificaciones</h3>
+                        <p class="stat-number">142</p>
+                        <span class="stat-growth positive">+15 este mes</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon purple">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <div class="stat-card-info">
+                        <h3>Exámenes Completados</h3>
+                        <p class="stat-number">487</p>
+                        <span class="stat-growth positive">+45 este mes</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Acciones rápidas -->
+            <section class="panel quick-actions">
+                <div class="panel-header">
+                    <h3><i class="fas fa-bolt"></i> Acciones Rápidas</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="action-buttons">
+                        <button class="action-button">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Agregar Usuario</span>
+                        </button>
+                        <button class="action-button">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Crear Curso</span>
+                        </button>
+                        <button class="action-button">
+                            <i class="fas fa-file-upload"></i>
+                            <span>Subir Recursos</span>
+                        </button>
+                        <button class="action-button">
+                            <i class="fas fa-clipboard-list"></i>
+                            <span>Crear Examen</span>
+                        </button>
+                        <button class="action-button">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Ver Reportes</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Panel de estadísticas -->
+            <section class="panel chart-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-chart-bar"></i> Estadísticas de Actividad</h3>
+                    <div class="panel-actions">
+                        <select id="chartTimeRange">
+                            <option value="week">Última Semana</option>
+                            <option value="month" selected>Último Mes</option>
+                            <option value="quarter">Último Trimestre</option>
+                            <option value="year">Último Año</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="chart-container">
+                        <!-- Aquí se insertaría un gráfico con JavaScript -->
+                        <div class="chart-placeholder">
+                            <div style="width: 100%; height: 300px; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                                <span style="color: #777;">Gráfico de actividad de usuarios</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Columnas de dashboard -->
+            <div class="dashboard-columns">
+                <!-- Usuarios recientes -->
+                <section class="panel recent-users">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-user-clock"></i> Usuarios Recientes</h3>
+                        <div class="panel-actions">
+                            <a href="#users" class="btn-link-sm">Ver Todos</a>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Último Acceso</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Juan Pérez</td>
+                                        <td>Hoy, 10:23 AM</td>
+                                        <td><span class="status active">ACTIVO</span></td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <button class="btn-icon-sm" title="Ver perfil"><i class="fas fa-eye"></i></button>
+                                                <button class="btn-icon-sm" title="Editar"><i class="fas fa-edit"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ana Gómez</td>
+                                        <td>Ayer, 3:45 PM</td>
+                                        <td><span class="status active">ACTIVO</span></td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <button class="btn-icon-sm" title="Ver perfil"><i class="fas fa-eye"></i></button>
+                                                <button class="btn-icon-sm" title="Editar"><i class="fas fa-edit"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Carlos López</td>
+                                        <td>12/Mar/2025</td>
+                                        <td><span class="status inactive">INACTIVO</span></td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <button class="btn-icon-sm" title="Ver perfil"><i class="fas fa-eye"></i></button>
+                                                <button class="btn-icon-sm" title="Editar"><i class="fas fa-edit"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>María Rodríguez</td>
+                                        <td>11/Mar/2025</td>
+                                        <td><span class="status active">ACTIVO</span></td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <button class="btn-icon-sm" title="Ver perfil"><i class="fas fa-eye"></i></button>
+                                                <button class="btn-icon-sm" title="Editar"><i class="fas fa-edit"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Actividades recientes -->
+                <section class="panel recent-activities">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-history"></i> Actividades Recientes</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="activity-list">
+                            <li class="activity-item">
+                                <div class="activity-icon user-icon">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <p><strong>Usuario Registrado</strong> - T12345 Roberto García</p>
+                                    <span class="activity-time">Hace 35 minutos</span>
+                                </div>
+                            </li>
+                            <li class="activity-item">
+                                <div class="activity-icon course-icon">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <p><strong>Curso Actualizado</strong> - Mantenimiento de Lavadoras 2025</p>
+                                    <span class="activity-time">Hace 2 horas</span>
+                                </div>
+                            </li>
+                            <li class="activity-item">
+                                <div class="activity-icon cert-icon">
+                                    <i class="fas fa-certificate"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <p><strong>Certificación Completada</strong> - T87654 Juan Pérez</p>
+                                    <span class="activity-time">Hace 4 horas</span>
+                                </div>
+                            </li>
+                            <li class="activity-item">
+                                <div class="activity-icon resource-icon">
+                                    <i class="fas fa-file-upload"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <p><strong>Recurso Agregado</strong> - Manual de Servicio Serie 500</p>
+                                    <span class="activity-time">Ayer, 2:15 PM</span>
+                                </div>
+                            </li>
+                            <li class="activity-item">
+                                <div class="activity-icon exam-icon">
+                                    <i class="fas fa-tasks"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <p><strong>Examen Creado</strong> - Diagnóstico de Fallas Avanzado</p>
+                                    <span class="activity-time">Ayer, 11:30 AM</span>
+                                </div>
+                            </li>
+                        </ul>
+                        <a href="#all-activities" class="btn-link">Ver todas las actividades <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Cursos populares -->
+            <section class="panel popular-courses">
+                <div class="panel-header">
+                    <h3><i class="fas fa-star"></i> Cursos Populares</h3>
+                    <div class="panel-actions">
+                        <a href="#courses" class="btn-link-sm">Ver Todos</a>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="courses-grid">
+                        <div class="course-card">
+                            <div class="course-header">
+                                <span class="course-category">Técnica</span>
+                                <span class="course-rating"><i class="fas fa-star"></i> 4.8</span>
+                            </div>
+                            <div class="course-content">
+                                <h4>Diagnóstico de Lavadoras Whirlpool</h4>
+                                <p>Curso completo de diagnóstico y solución de problemas.</p>
+                                <div class="course-meta">
+                                    <span><i class="fas fa-users"></i> 125 inscritos</span>
+                                    <span><i class="fas fa-clock"></i> 20 horas</span>
+                                </div>
+                            </div>
+                            <div class="course-footer">
+                                <a href="#edit" class="btn-sm">Editar</a>
+                                <a href="#view" class="btn-sm btn-outline">Ver</a>
+                            </div>
+                        </div>
+
+                        <div class="course-card">
+                            <div class="course-header">
+                                <span class="course-category">Reparación</span>
+                                <span class="course-rating"><i class="fas fa-star"></i> 4.7</span>
+                            </div>
+                            <div class="course-content">
+                                <h4>Reparación de Refrigeradores</h4>
+                                <p>Guía completa para la reparación de unidades de refrigeración.</p>
+                                <div class="course-meta">
+                                    <span><i class="fas fa-users"></i> 98 inscritos</span>
+                                    <span><i class="fas fa-clock"></i> 18 horas</span>
+                                </div>
+                            </div>
+                            <div class="course-footer">
+                                <a href="#edit" class="btn-sm">Editar</a>
+                                <a href="#view" class="btn-sm btn-outline">Ver</a>
+                            </div>
+                        </div>
+
+                        <div class="course-card">
+                            <div class="course-header">
+                                <span class="course-category">Instalación</span>
+                                <span class="course-rating"><i class="fas fa-star"></i> 4.5</span>
+                            </div>
+                            <div class="course-content">
+                                <h4>Instalación Profesional de Lavaplatos</h4>
+                                <p>Procedimientos correctos para instalaciones perfectas.</p>
+                                <div class="course-meta">
+                                    <span><i class="fas fa-users"></i> 87 inscritos</span>
+                                    <span><i class="fas fa-clock"></i> 12 horas</span>
+                                </div>
+                            </div>
+                            <div class="course-footer">
+                                <a href="#edit" class="btn-sm">Editar</a>
+                                <a href="#view" class="btn-sm btn-outline">Ver</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer admin-footer">
+        <div class="footer-container">
+            <p>&copy; 2025 Whirl Inspector - Panel de Administración. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    
+    <script src="/js/admin-dashboard.js"></script>
+</body>
+</html>

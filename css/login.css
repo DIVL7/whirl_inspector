@@ -1,0 +1,88 @@
+/* Login Page Styles */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 1rem;
+}
+
+.login-form-container {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+}
+
+.login-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: #333;
+}
+
+.input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 12px;
+    color: #666;
+    font-size: 16px;
+}
+
+.input-container input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.input-container input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+}
+
+.login-form .btn-primary {
+    margin-top: 1rem;
+    width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .login-form-container {
+        padding: 1.5rem;
+    }
+    
+    .login-title {
+        font-size: 1.5rem;
+    }
+    
+    .input-container input {
+        padding: 10px 10px 10px 36px;
+        font-size: 14px;
+    }
+}

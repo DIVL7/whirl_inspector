@@ -1,0 +1,99 @@
+/* Estilos específicos para el dashboard de administración */
+
+/* Header modificado para administración */
+.admin-header {
+    background-color: #343a40;
+    color: white;
+}
+
+.admin-header .logo,
+.admin-header .menu-toggle,
+.admin-header #userName,
+.admin-header .user-menu-toggle {
+    color: white;
+}
+
+.admin-header .btn-icon {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.admin-header .btn-icon:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* Sidebar para admin */
+.admin-sidebar {
+    background-color: #343a40;
+}
+
+.admin-sidebar .sidebar-nav li a {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.admin-sidebar .sidebar-nav li.active a {
+    background-color: rgba(255, 134, 75, 0.2);
+    color: var(--primary-color);
+    border-left: 3px solid var(--primary-color);
+}
+
+.admin-sidebar .sidebar-nav li:not(.active) a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.admin-sidebar .submenu {
+    background-color: #2c3136;
+}
+
+/* Acciones rápidas */
+.action-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.action-button {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1.25rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.action-button:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    border-color: var(--primary-color);
+}
+
+.action-button i {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+.action-button span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+/* Chart placeholder */
+.chart-placeholder {
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.chart-placeholder img {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: cover;
+}
